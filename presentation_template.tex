@@ -1,0 +1,415 @@
+\documentclass[9pt, aspectratio=169]{beamer}
+\usetheme{default}
+\useinnertheme{}
+\setbeamersize{text margin left=4em, text margin right=4em}
+
+% USE LuaLaTeX!!!!
+% ---------- FONTS (LuaLaTeX) ----------
+\usepackage[sfdefault,light]{inter}
+\usepackage{unicode-math}
+\setmathfont{Fira Math}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\hfuzz=4pt % suppress overfull hbox warnings
+
+% ---------- CORE PACKAGES ----------
+\usepackage{tikz}
+\usetikzlibrary{positioning, calc, arrows.meta, shapes, fit}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{makecell}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{xcolor}
+\usepackage{changepage}
+\usepackage{setspace}
+\usepackage[export]{adjustbox}
+\usepackage{appendixnumberbeamer}
+\usepackage{dsfont}
+\usepackage{lipsum} % placeholder text; remove in final version
+
+% ---------- BIBLIOGRAPHY (biblatex + biber) ----------
+\usepackage[style=authoryear-ibid, backend=biber,
+  uniquename=false, giveninits=true,
+  useprefix=false]{biblatex}
+\addbibresource{references.bib} % >>> point to your .bib file <<<
+
+% ---------- HYPERLINKS ----------
+\hypersetup{
+  colorlinks  = false,
+  linkcolor   = base,
+  filecolor   = base,
+  citecolor   = base,
+  urlcolor    = base,
+}
+
+% ============================================================
+%                       COLOUR PALETTE
+% ============================================================
+\definecolor{base}{RGB}{45,104,196}
+\definecolor{base_sub}{RGB}{122,143,166}
+\definecolor{accent}{RGB}{38,166,154}
+\definecolor{red}{RGB}{228,0,43}
+\definecolor{grey}{RGB}{53,68,76}
+\definecolor{green}{RGB}{98,150,119}
+\definecolor{blue}{RGB}{8,96,168}
+\definecolor{black}{RGB}{10,10,20}
+
+% ============================================================
+%                      BEAMER STYLING
+% ============================================================
+
+% --- Frame titles ---
+\setbeamercolor{frametitle}{fg=base}
+\setbeamercolor{framesubtitle}{fg=base_sub}
+\setbeamerfont{frametitle}{size=\Large}
+\setbeamerfont{framesubtitle}{size=\small}
+
+% --- Title page ---
+\setbeamercolor{title}{fg=base}
+\setbeamercolor{date}{fg=grey}
+\setbeamercolor{normal text}{fg=black}
+\setbeamerfont{title}{size=\LARGE, parent=structure}
+\setbeamerfont{subtitle}{size=\large}
+
+% --- Lists ---
+\setbeamercolor{itemize item}{fg=base_sub}
+\setbeamercolor{itemize subitem}{fg=base_sub}
+\setbeamercolor{enumerate item}{fg=base}
+\setbeamercolor{enumerate subitem}{fg=base_sub}
+\setbeamertemplate{itemize items}{-}
+
+% --- Headline (section navigation bar) ---
+\setbeamercolor{headline}{bg=base_sub, fg=white}
+\setbeamercolor{section in head/foot}{fg=white, bg=base_sub}
+\setbeamerfont{section in head/foot}{size=\tiny}
+
+% --- Table of contents ---
+\setbeamercolor{section in toc}{fg=grey}
+\setbeamercolor{subsection in toc}{fg=grey}
+
+% --- Buttons ---
+\setbeamercolor{button}{bg=white, fg=base}
+\setbeamercolor{button border}{fg=base}
+
+% --- Captions ---
+\setbeamerfont{caption}{size=\scriptsize}
+\setbeamertemplate{caption}[numbered]
+\setbeamercolor{caption}{fg=grey}
+\captionsetup{belowskip=1mm, aboveskip=3mm}
+\captionsetup[figure]{labelfont={color=base_sub}}
+\captionsetup[table]{labelfont={color=base_sub}}
+
+% --- Footline ---
+\setbeamercolor{author in head/foot}{bg=white, fg=base_sub}
+\setbeamerfont{author in head/foot}{size=\scriptsize}
+\setbeamercolor{footline}{fg=base_sub, bg=white}
+\setbeamerfont{footline}{size=\scriptsize}
+
+% --- Remove navigation symbols ---
+\setbeamertemplate{navigation symbols}{}
+
+% ============================================================
+%                     CUSTOM MACROS
+% ============================================================
+
+%%% Presenter tag (shown in footer)
+\newcommand{\insertpresenter}{}%
+\newcommand{\presenter}[1]{\renewcommand{\insertpresenter}{#1}}%
+
+%%% Significance stars for tables
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+%%% Overlay emphasis (bold + green on slide 2)
+\newcommand{\sig}[1]{\alt<2>{\textbf{\textcolor{green}{#1}}}{#1}}
+
+%%% Inline grey citation — for unobtrusive references on slides
+%%%   Usage: \graycite{Author} 
+\newcommand{\graycite}[2][]{{\footnotesize\textcolor{grey}{\parencite[#1][]{#2}}}}
+
+% ============================================================
+%                     TEMPLATE ELEMENTS
+% ============================================================
+
+%%% Footline
+\makeatletter
+\setbeamertemplate{footline}{%
+  \leavevmode
+  \begin{beamercolorbox}[wd=\paperwidth, ht=2.2mm, dp=1.2mm,
+    leftskip=2mm, rightskip=2mm]{author in head/foot}%
+    \hrule\vspace{1mm}
+    \begin{tabularx}{\dimexpr\paperwidth-4mm}{lXr}
+      \insertpresenter &  & \insertframenumber
+    \end{tabularx}
+  \end{beamercolorbox}%
+}
+\makeatother
+
+%%% Headline
+\makeatletter
+\setbeamertemplate{headline}{%
+  \leavevmode
+  \begin{beamercolorbox}[wd=\paperwidth, ht=2.2mm, dp=1.2mm,
+    leftskip=10mm, rightskip=10mm, center]{headline}%
+    \insertsectionnavigationhorizontal{\dimexpr\paperwidth-20mm\relax}{}{}%
+  \end{beamercolorbox}%
+}
+\makeatother
+
+%%% Centred frame title
+\setbeamertemplate{frametitle}{%
+  \begin{center}
+    {\usebeamerfont{frametitle}\usebeamercolor[fg]{frametitle}\insertframetitle}\\[-0.35em]
+    {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle}
+  \end{center}
+}
+
+%%% Title page
+\setbeamertemplate{title page}{
+  \vbox{}
+  \vspace*{8mm}
+  \begin{beamercolorbox}[center]{title}
+    \usebeamerfont{title}\inserttitle\par%
+    \vspace*{1mm}
+    \ifx\insertsubtitle\@empty\vspace*{0mm}
+    \else
+      {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+      \vspace*{5mm}
+    \fi
+  \end{beamercolorbox}
+  \begin{beamercolorbox}[center]{titlegraphic}\inserttitlegraphic\end{beamercolorbox}
+  \begin{beamercolorbox}[center]{author}\usebeamerfont{author}\insertauthor\end{beamercolorbox}
+  \vspace*{7mm}
+  \begin{beamercolorbox}[center]{date}\usebeamerfont{date}\insertdate\end{beamercolorbox}
+  \vfill
+}
+
+% ============================================================
+%                   CUSTOM ENVIRONMENTS
+% ============================================================
+
+%%% Transition frame (full-colour background, no frame number)
+\newenvironment{transitionframe}{%
+  \setbeamertemplate{headline}{}%
+  \setbeamercolor{background canvas}{bg=base}%
+  \begin{frame}[plain, noframenumbering]%
+  \vfill}{\vfill\end{frame}}
+
+%%% Wide itemize (compact margins, extra spacing)
+\newenvironment{wideitemize}{%
+  \setlength{\leftmargini}{1em}%
+  \setlength{\leftmarginii}{1.5em}%
+  \itemize\addtolength{\itemsep}{2pt}}%
+  {\enditemize}
+
+%%% Wide enumerate
+\newenvironment{widenumerate}{%
+  \setlength{\leftmargini}{1.5em}%
+  \setlength{\leftmarginii}{2em}%
+  \enumerate\addtolength{\itemsep}{3pt}}%
+  {\endenumerate}
+
+% ============================================================
+%                    DOCUMENT INFO
+% ============================================================
+% >>> Edit these fields for your presentation <<<
+
+\title{\textbf{Your Presentation Title Here}}
+\subtitle{An Optional Subtitle}
+
+\author[]{%
+  \small{Author One} \textcolor{grey}{\scriptsize{with}}\\[0.5mm]
+  \tiny{First University}\\[3mm]
+  \small{Author Two}\\[0.5mm]
+  \tiny{Second University}%
+}
+
+\date{%
+  \scriptsize{\textbf{Conference / Seminar Name}}\\[1mm]
+  \footnotesize{Month Day, Year}%
+}
+\titlegraphic{}
+\presenter{Author One \& Author Two (Year)}
+
+% ============================================================
+\begin{document}
+% ============================================================
+
+% ------ TITLE SLIDE ------
+\begin{frame}[plain, noframenumbering]
+  \maketitle
+\end{frame}
+
+% ============================================================
+%  EXAMPLE FRAMES — delete or duplicate as needed
+% ============================================================
+
+\section{Introduction}
+
+% ------ TEXT FRAME (with citation examples) ------
+\begin{frame}{Text Frame Example}
+  \begin{wideitemize}
+    \item First key point of your presentation:
+      \begin{itemize}
+        \item Inline grey cite for slides: \graycite[e.g.]{key1, key2}.
+        \item Biblatex parenthetical: \parencite{key1}.
+      \end{itemize}
+    \item Second key point: as \textcite{key2} show, this result holds.
+  \end{wideitemize}
+\end{frame}
+
+% ------ TEXT + PICTURE (two-column) ------
+\begin{frame}{Text and Picture Frame}
+  \begin{columns}
+    \begin{column}{0.6\textwidth}
+      \begin{wideitemize}
+        \setlength{\itemsep}{1em}
+        \item Describe the key insight here \graycite{Author 2003}.
+        \item Additional context or methodology
+          \begin{itemize}
+            \item A sub-point with detail.
+          \end{itemize}
+        \item[$\Rightarrow$] \textcolor{accent}{\textbf{Key result or takeaway.}}
+      \end{wideitemize}
+    \end{column}
+    \begin{column}{0.35\textwidth}
+      \begin{figure}
+        \centering
+        \includegraphics[width=\linewidth]{example-image-a} 
+        \caption{Caption for the figure.}
+      \end{figure}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ------ FULL-WIDTH FIGURE ------
+\begin{frame}{Full Figure Frame}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{example-image-b} 
+    \caption{Description of the figure.}
+  \end{figure}
+\end{frame}
+
+% ------ ROADMAP / TABLE OF CONTENTS ------
+\begin{frame}[plain, noframenumbering]{Roadmap}
+  \tableofcontents
+\end{frame}
+
+
+\section{Methodology}
+
+% ------ TRANSITION SLIDE ------
+\begin{transitionframe}
+  \begin{center}
+    \color{white}\Huge\bfseries Methodology
+  \end{center}
+\end{transitionframe}
+
+% ------ TABLE FRAME ------
+\begin{frame}{Table Frame Example}
+  \begin{columns}[c]
+    \begin{column}{0.6\textwidth}
+      \begin{table}
+        \centering\small
+        \setlength{\tabcolsep}{6pt}
+        \caption{Summary Statistics}
+        \begin{tabular}{lcc}
+          \toprule
+          Variable & Mean & Std.\ Dev.\\
+          \midrule
+          Outcome A & 0.42 & 0.12\\
+          Outcome B & 1.78 & 0.55\\
+          $\cdots$  & $\cdots$ & $\cdots$\\
+          \bottomrule
+        \end{tabular}
+      \end{table}
+    \end{column}
+    \begin{column}{0.35\textwidth}
+      \begin{figure}
+        \centering
+        \includegraphics[width=\linewidth]{example-image-c}
+        \caption{Related visual.}
+      \end{figure}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ------ EQUATION FRAME ------
+\begin{frame}{Equation Frame Example}
+  \begin{wideitemize}
+    \item We estimate the following specification:
+  \end{wideitemize}
+  \vspace{3mm}
+  \begin{equation*}
+    Y_{it} = \alpha + \beta\, X_{it} + \gamma\, Z_{it} + \varepsilon_{it}
+  \end{equation*}
+  \vspace{3mm}
+  \begin{wideitemize}
+    \item[$Y_{it}$:] outcome of interest for unit $i$ at time $t$.
+    \item[$X_{it}$:] main explanatory variable.
+    \item[$Z_{it}$:] vector of controls.
+  \end{wideitemize}
+\end{frame}
+
+
+\section{Results}
+
+% ------ ENUMERATED LIST ------
+\begin{frame}{Numbered Contributions}
+  \begin{widenumerate}
+    \item First contribution or finding.
+    \item Second contribution or finding.
+    \item Third contribution or finding.
+  \end{widenumerate}
+\end{frame}
+
+% ------ OVERLAY / PAUSE EXAMPLE ------
+\begin{frame}{Progressive Reveal}
+  \textcolor{accent}{Key Question:} What is the main takeaway?
+  \begin{wideitemize}
+    \item Dimension one: \onslide<2>{revealed answer.}
+    \item Dimension two: \onslide<2>{revealed answer.}
+    \item Dimension three: \onslide<2>{revealed answer.}
+  \end{wideitemize}
+\end{frame}
+
+
+\section{Conclusion}
+
+% ------ CONCLUSION ------
+\begin{frame}{Conclusion}
+  \begin{wideitemize}
+    \setlength{\itemsep}{1.5em}
+    \item Summarise the main contribution \graycite{Author One \& Author Two 2026}.
+    \item Highlight policy or research implications.
+    \item Outline next steps or future work.
+  \end{wideitemize}
+\end{frame}
+
+% ------ REFERENCES (optional — only if you want a dedicated slide) ------
+% Uncomment the block below to show a full reference list on a slide.
+% \begin{frame}[allowframebreaks]{References}
+%   \printbibliography[heading=none]
+% \end{frame}
+
+
+% ============================================================
+%                       APPENDIX
+% ============================================================
+\appendix
+
+% ------ THANK YOU SLIDE ------
+\begin{frame}[plain]
+  \begin{center}
+    \color{grey}{\bfseries\Huge{Thank You!}}\\
+    \vspace{7mm}
+    your.email@university.edu \hspace{3mm}|\hspace{3mm} yourwebsite.com
+  \end{center}
+\end{frame}
+
+\end{document}
