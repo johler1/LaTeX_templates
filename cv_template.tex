@@ -1,0 +1,166 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{heuristica}
+\usepackage{xurl}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+
+% ============================================================
+%                     COLOUR PALETTE
+% ============================================================
+\definecolor{base}{RGB}{0, 60, 80}
+
+\hypersetup{
+  colorlinks = true,
+  linkcolor  = base,
+  filecolor  = base,
+  citecolor  = base,
+  urlcolor   = base,
+}
+
+% ============================================================
+%                      FORMATTING
+% ============================================================
+\pagenumbering{gobble}
+\setstretch{1.05}
+\setlength{\parskip}{0em}
+\setlength{\parindent}{0pt}
+
+\titleformat{\section}{\bfseries\normalsize}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\bfseries}{}{0em}{}
+
+\setlist[itemize]{noitemsep, topsep=0pt, leftmargin=2em,
+  parsep=0pt, partopsep=0pt, label=--}
+
+% --- Header ---
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\footnotesize\textit{Last updated: \today}}
+\renewcommand{\headrulewidth}{0pt}
+
+% ============================================================
+%                     HELPER MACROS
+% ============================================================
+
+%%% Education entry
+%%%   \education{Institution}{Date range}{Programme}{items ...}
+\newcommand{\education}[3]{%
+  \textbf{#1} \hfill #2 \\
+  \hspace*{1em}#3%
+}
+
+%%% Position entry (visiting, employment, etc.)
+%%%   \position{Institution}{Date range}{Role details}
+\newcommand{\position}[3]{%
+  \textbf{#1} \hfill #2 \\
+  \hspace*{1em}#3%
+}
+
+%%% Paper entry with optional coauthors
+%%%   \paper{Title}  or  \paper[with Coauthor (Affiliation)]{Title}
+\newcommand{\paper}[2][]{%
+  \item #2%
+  \ifx&#1&\else\\\hspace*{1em}with #1\fi%
+}
+
+% ============================================================
+\begin{document}
+% ============================================================
+
+% ------ HEADER ------
+\begin{center}
+  {\Large \textbf{YOUR NAME}} \\[4pt]
+  \href{mailto:your.email@university.edu}{your.email[at]university.edu}
+  $\quad|\quad$
+  \href{https://yourwebsite.com}{yourwebsite.com}
+\end{center}
+
+% ------ EDUCATION ------
+\section*{EDUCATION}
+
+\education{University Name}{2024--\emph{ongoing}}{PhD Programme Name}
+\begin{itemize}
+  \item Funding or scholarship details.
+  \item Supervised by Advisor One and Advisor Two.
+\end{itemize}
+\vspace{1em}
+
+\education{University Name}{2022--2023}{Master's Programme Name}
+\begin{itemize}
+  \item Graduated with distinction / honours / GPA.
+  \item Dissertation: \emph{``Title of Your Dissertation''}
+\end{itemize}
+\vspace{1em}
+
+\education{University Name}{2019--2022}{Bachelor's Programme Name}
+\begin{itemize}
+  \item Degree classification / GPA.
+\end{itemize}
+\vspace{1em}
+
+\textit{Awards}
+\begin{itemize}[leftmargin=1em]
+  \item Award Name (Granting Body) \hfill Year \\
+    \textit{Brief description of the award}
+  \item Another Award (Granting Body) \hfill Year
+\end{itemize}
+
+% ------ VISITING POSITIONS ------
+\section*{VISITING POSITIONS}
+
+\position{University Name}{Month--Month Year}%
+  {\textit{Visiting Scholar}, Department -- \textit{Sponsor:} Host Name}
+
+% ------ WORKING PAPERS ------
+\section*{WORKING PAPERS}
+
+\begin{itemize}[itemsep=0.3em, leftmargin=1em]
+  \paper{Title of Your First Working Paper}
+  \paper[Coauthor One (Affiliation) and Coauthor Two (Affiliation)]%
+    {\href{https://link-to-paper.com}{Title of Your Second Working Paper}}
+\end{itemize}
+
+% ------ WORK IN PROGRESS ------
+\section*{SELECTED WORK IN PROGRESS}
+
+\begin{itemize}[itemsep=0.3em, leftmargin=1em]
+  \paper{Title of Project One}
+  \paper[Coauthor (Affiliation)]{Title of Project Two}
+\end{itemize}
+
+% ------ TEACHING ------
+\section*{TEACHING EXPERIENCE}
+
+Course Name (\textit{Level}), Department \hfill Term Year
+
+% ------ SERVICE ------
+\section*{ACADEMIC SERVICE}
+
+Role, Institution \hfill 2025--\emph{ongoing} \\
+Another Role, Institution \hfill 2024--2025
+
+% ------ PRESENTATIONS ------
+\section*{PRESENTATIONS}
+
+\textbf{2025} \\
+Seminar A, Conference B, Workshop C, University D* \\[2pt]
+\textbf{2024} \\
+Conference E, Workshop F \\[2pt]
+\emph{*upcoming presentations}
+
+% ------ SKILLS ------
+\section*{SKILLS}
+
+\begin{tabular}{@{}p{0.45\textwidth}p{0.45\textwidth}@{}}
+  Statistical Software: R, Stata & GIS Software: ArcGIS, QGIS \\
+  Programming: Python            & Languages: Language A, Language B \\
+\end{tabular}
+
+\end{document}

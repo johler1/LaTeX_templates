@@ -1,0 +1,339 @@
+\documentclass[10pt]{article}
+
+% ============================================================
+%                     FONTS & ENCODING
+% ============================================================
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{heuristica}
+
+% ============================================================
+%                      PAGE LAYOUT
+% ============================================================
+\usepackage[letterpaper, margin=1.25in]{geometry}
+\usepackage{setspace}
+
+% ============================================================
+%                    GENERAL PACKAGES
+% ============================================================
+\usepackage{etoolbox}       % \BeforeBeginEnvironment, etc.
+\usepackage{hyphenat}
+\hyphenpenalty=500
+\hbadness=5000
+\usepackage{appendix}
+\usepackage{microtype}       % improved justification
+\usepackage{dirtytalk}       % \say{...} for inline quotes
+
+% ============================================================
+%          FIGURES, TABLES, MATH & CAPTIONS
+% ============================================================
+\usepackage{rotating}
+\usepackage{placeins}        % \FloatBarrier
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{adjustbox}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{threeparttable}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{amsmath,amssymb}
+\usepackage{amsthm}
+\usepackage{dsfont}          % \mathds{1} for indicator functions
+
+% Shrink all tabular text
+\BeforeBeginEnvironment{tabular}{\footnotesize}
+\AtBeginEnvironment{tabular}{\small}
+\AtBeginEnvironment{tabularx}{\small}
+
+% Significance stars (for regression tables)
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+% ============================================================
+%                   THEOREM-LIKE BLOCKS
+% ============================================================
+\makeatletter
+\newtheoremstyle{plain-equal}%
+  {1em}{0pt}{\itshape}{}{\bfseries}{.}{.5em}{}
+\makeatother
+
+\theoremstyle{plain-equal}
+\newtheorem{hypothesis}{Hypothesis}
+\newtheorem{result}{Result}
+\newtheorem*{assertion}{Assertion}
+\newtheorem*{idassumption}{Core Assumption}
+
+% ============================================================
+%                    FIGURE NOTES
+% ============================================================
+%%% Usage: place \figurenotes{...} below a figure caption
+\newcommand{\figurenotes}[1]{%
+  \vspace{0.5em}%
+  \begin{minipage}{\textwidth}
+    \footnotesize \textit{Notes:} #1
+  \end{minipage}%
+}
+
+% ============================================================
+%              BIBLIOGRAPHY (biblatex + biber)
+% ============================================================
+%%% ReStud-style author-year format
+\usepackage[
+  backend=biber,
+  style=authoryear,
+  sorting=nyt,
+  giveninits=true,
+  uniquename=false,
+  useprefix=true,
+  dashed=false,
+  maxcitenames=2,
+  mincitenames=1,
+  maxbibnames=10,
+  minbibnames=6,
+  isbn=false, doi=false, url=false, eprint=false
+]{biblatex}
+
+% Remove "In:" before journal names
+\renewbibmacro{in:}{}
+
+% UPPERCASE authors in the reference list
+\AtBeginBibliography{%
+  \renewcommand*{\mkbibnamefamily}[1]{\MakeUppercase{#1}}%
+  \renewcommand*{\mkbibnamegiven}[1]{\MakeUppercase{#1}}%
+  \renewcommand*{\mkbibnameprefix}[1]{\MakeUppercase{#1}}%
+  \renewcommand*{\mkbibnamesuffix}[1]{\MakeUppercase{#1}}%
+}
+
+\DefineBibliographyStrings{english}{andothers = {et al.}}
+\DeclareNameAlias{sortname}{family-given}
+\DeclareNameAlias{default}{family-given}
+
+% >>> Point to your .bib file <<<
+\addbibresource{references.bib}
+
+% ============================================================
+%                      COLOUR & LINKS
+% ============================================================
+\usepackage{xcolor}
+\definecolor{main}{RGB}{0,102,102}
+
+\usepackage{xurl}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks      = true,
+  hyperfootnotes  = true,
+  linkcolor       = main,
+  filecolor       = main,
+  citecolor       = main,
+  urlcolor        = main,
+}
+
+% ============================================================
+%                   FOOTNOTE STYLE
+% ============================================================
+%%% Symbol footnotes on the title page, arabic thereafter
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\setlength{\skip\footins}{5pt}
+
+% ============================================================
+%                   PARAGRAPH SPACING
+% ============================================================
+\setlength{\parskip}{1em}
+\setlength{\parindent}{15pt}
+
+% ============================================================
+%                  CUSTOM TITLE PAGE
+% ============================================================
+\makeatletter
+\renewcommand{\maketitle}{%
+  \vspace*{1cm}
+  \begin{center}
+    {\LARGE\bfseries \@title \par}
+    {\normalsize \@author \\}
+    \vspace*{0.5em}
+    {\normalsize \@date}
+  \end{center}
+  \@thanks
+}
+\newcommand{\subtitle}[1]{\gdef\@subtitle{#1}}
+\makeatother
+
+% ============================================================
+%              CUSTOM ABSTRACT (with JEL & Keywords)
+% ============================================================
+\makeatletter
+\newcommand{\JEL}[1]{\gdef\@JEL{#1}}
+\newcommand{\Keywords}[1]{\gdef\@Keywords{#1}}
+\gdef\@JEL{}
+\gdef\@Keywords{}
+
+\renewenvironment{abstract}{%
+  \begin{center}
+  \begin{minipage}{0.9\textwidth}
+  \begin{center}
+    {\normalsize\bfseries Abstract \par}
+  \end{center}
+  \vspace*{-0.2em}
+  \small
+}{%
+  \ifx\@JEL\empty\else
+    \vspace{2em}\noindent{\normalsize\bfseries \\ JEL Classification:}
+    \normalsize\ \@JEL \par
+  \fi
+  \ifx\@Keywords\empty\else
+    \vspace{0.5em}\noindent{\normalsize\bfseries Keywords:}
+    \normalsize\ \@Keywords \par
+  \fi
+  \end{minipage}
+  \end{center}
+  \vfill
+}
+\makeatother
+
+% ============================================================
+%                   DOCUMENT INFO
+% ============================================================
+% >>> Edit these fields for your paper <<<
+
+\title{Your Paper Title%
+  \thanks{Acknowledgements and funding information go here.
+    An earlier version was circulated as ``Working Title''.}}
+\subtitle{}
+\author{Author One\thanks{Affiliation, Email:
+  \href{mailto:author@university.edu}{author@university.edu}}}
+\date{Month Year}
+\JEL{X00, Y11, Z22}
+\Keywords{Keyword One; Keyword Two; Keyword Three.}
+
+%% For random text in template
+\usepackage{lipsum}
+
+
+% ============================================================
+\begin{document}
+% ============================================================
+
+\maketitle
+
+\begin{abstract}
+  \lipsum[1]
+\end{abstract}
+
+\pagebreak
+\setstretch{1.15}
+\renewcommand{\thefootnote}{\arabic{footnote}}
+\setcounter{footnote}{0}
+
+% ============================================================
+%                     MAIN TEXT
+% ============================================================
+
+\section*{Introduction}
+
+\lipsum[2-3] \parencite{key1}. \textcite{key2} \lipsum[4][1-3]
+
+\paragraph{Related Literature.}
+\lipsum[5] \parencite[e.g.][]{key1}.
+
+The paper proceeds as follows.
+Section~\ref{sec:data} describes the data.
+Section~\ref{sec:method} presents the methodology.
+Section~\ref{sec:results} discusses the results.
+Section~\ref{sec:conclusion} concludes.
+
+% ------ DATA ------
+\section{Data}\label{sec:data}
+
+\lipsum[6]
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.6\textwidth]{example-image-a}
+  \caption{Descriptive figure title.}
+  \label{fig:fig1}
+  \figurenotes{\lipsum[7][1-2]}
+\end{figure}
+
+% Example: input a standalone table file
+% \input{input/Table_1}
+
+\subsection{Variable Construction}
+
+\lipsum[8]
+
+% ------ METHODOLOGY ------
+\section{Methodology}\label{sec:method}
+
+\lipsum[9]
+
+\begin{equation}\label{eq:main}
+  Y_{it} = \alpha + \beta\, X_{it} + \gamma\, Z_{it} + \varepsilon_{it}
+\end{equation}
+
+\noindent where $Y_{it}$ is the outcome, $X_{it}$ the treatment,
+and $Z_{it}$ a vector of controls. \lipsum[10][1-3]
+
+\begin{hypothesis}
+  \lipsum[11][1]
+\end{hypothesis}
+
+% ------ RESULTS ------
+\section{Results}\label{sec:results}
+
+\lipsum[12]
+
+\begin{result}
+  \lipsum[13][1]
+\end{result}
+
+\begin{figure}[tbh]
+  \centering
+  \includegraphics[width=0.7\textwidth]{example-image-b}
+  \caption{Main result figure.}
+  \label{fig:fig2}
+  \figurenotes{\lipsum[14][1-2]}
+\end{figure}
+
+\subsection{Robustness}
+
+\lipsum[15]
+
+% ------ CONCLUSION ------
+\section{Conclusion}\label{sec:conclusion}
+
+\lipsum[16-17]
+
+% ============================================================
+%                    REFERENCES
+% ============================================================
+\pagebreak
+\printbibliography
+
+% ============================================================
+%                     APPENDIX
+% ============================================================
+\pagebreak
+\begin{appendices}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+\renewcommand{\thetable}{A\arabic{table}}
+\renewcommand{\thefigure}{A\arabic{figure}}
+\setcounter{page}{1}
+\renewcommand{\thepage}{A\arabic{page}}
+
+\FloatBarrier
+\section{Additional Tables and Figures}\label{app:additional}
+
+\lipsum[19-20]
+
+% \input{input/Table_A1}
+
+\FloatBarrier
+\section{Extended Discussion}\label{app:extended}
+
+\lipsum[19-20]
+
+\end{appendices}
+
+\end{document}
